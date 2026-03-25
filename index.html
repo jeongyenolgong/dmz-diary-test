@@ -2162,10 +2162,11 @@ function submitAnswer() {
   if (!input) return;
   const correct = input === blank.answer || (blank.altAnswers && blank.altAnswers.includes(input));
   if (correct) {
-    state.solvedBlanks[currentBlankId] = blank.answer;
+    const solvedId = currentBlankId;
+    state.solvedBlanks[solvedId] = blank.answer;
     closeAnswerModal();
-    showToast('correct', '정답!', `빈칸 [${currentBlankId}]이 복원되었습니다.`);
-    setTimeout(() => { openSource(currentBlankId); }, 1200);
+    showToast('correct', '복원되었습니다.', '');
+    setTimeout(() => { openSource(solvedId); }, 1200);
   } else {
     showToast('incorrect', '다시 확인해보세요', '다른 자료를 교차 참조하여 정답을 찾아보세요.');
   }
