@@ -1910,30 +1910,47 @@ function buildDmzMapSvg() {
     [-1, -1, -1,  0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
   ];
 
-  const catStatus = CATEGORIES.map((cat, i) => {
+  // 카테고리별 고유 색상
+  const catColors = ['#5B7FCC','#4CAF50','#D4884A','#9C6ADE','#E05757','#3AACBF'];
+  const emptyColor = '#333';
+
+  // 각 카테고리의 완료 여부 (스토리별)
+  const storyDone = CATEGORIES.map((cat) => {
     const stories = STORIES[cat.id] || [];
-    const completed = stories.filter(s => state.completedStories.includes(s.id)).length;
-    const total = stories.length;
-    if (total === 0) return 'empty';
-    if (completed === total) return 'done';
-    if (completed > 0) return 'partial';
-    return 'none';
+    return stories.map(s => state.completedStories.includes(s.id));
+  });
+
+  // 카테고리 내 완료된 스토리 비율로 셀 채우기 결정
+  const catFillRatio = CATEGORIES.map((cat, i) => {
+    const stories = STORIES[cat.id] || [];
+    if (stories.length === 0) return 0;
+    return stories.filter(s => state.completedStories.includes(s.id)).length / stories.length;
   });
 
   const px = 14;
   const cols = map[0].length;
   const rows = map.length;
-  let cells = '';
+
+  // 각 카테고리의 셀 위치를 수집
+  const catCells = Array.from({length: 6}, () => []);
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
-      const zone = map[r][c];
-      if (zone === -1) continue;
-      const st = catStatus[zone];
-      let fill = '#eee';
-      if (st === 'done') fill = '#000';
-      else if (st === 'partial') fill = '#aaa';
-      else if (st === 'none') fill = '#ddd';
-      cells += `<rect x="${c*px}" y="${r*px}" width="${px-1}" height="${px-1}" fill="${fill}" stroke="#ccc" stroke-width="0.5"/>`;
+      if (map[r][c] >= 0) catCells[map[r][c]].push({r, c});
+    }
+  }
+
+  let cells = '';
+  for (let zone = 0; zone < 6; zone++) {
+    const zoneCells = catCells[zone];
+    const stories = STORIES[CATEGORIES[zone].id] || [];
+    const completedCount = stories.filter(s => state.completedStories.includes(s.id)).length;
+    // 완료된 스토리 수만큼 셀을 채움
+    const fillCount = stories.length > 0 ? Math.floor(zoneCells.length * completedCount / stories.length) : 0;
+
+    for (let i = 0; i < zoneCells.length; i++) {
+      const {r, c} = zoneCells[i];
+      const fill = i < fillCount ? catColors[zone] : emptyColor;
+      cells += `<rect x="${c*px}" y="${r*px}" width="${px-1}" height="${px-1}" fill="${fill}" stroke="#555" stroke-width="0.5"/>`;
     }
   }
 
