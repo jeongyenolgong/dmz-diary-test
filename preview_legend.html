@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>픽셀 맵 범례 미리보기</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #000; color: #fff; font-family: 'Galmuri11', monospace; padding: 40px; }
+  h2 { margin-bottom: 20px; font-size: 16px; }
+
+  .dmz-map-wrap { max-width: 500px; }
+  .dmz-map-labels { display: flex; justify-content: space-between; font-size: 10px; color: #aaa; margin-bottom: 4px; }
+  .dmz-pixel-map { margin-bottom: 10px; }
+  .dmz-pixel-map svg { width: 100%; }
+
+  /* 새 범례 스타일 */
+  .dmz-map-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 10px;
+    color: #aaa;
+    margin-top: 8px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .legend-box {
+    width: 10px;
+    height: 10px;
+    border: 1px solid #555;
+  }
+
+  .dmz-map-status { text-align: center; font-size: 11px; color: #aaa; margin-top: 10px; }
+
+  .section-title { font-size: 13px; margin-bottom: 8px; border-bottom: 1px solid #333; padding-bottom: 4px; }
+
+  /* 비교용 */
+  .compare { display: flex; gap: 60px; margin-top: 40px; }
+  .compare > div { flex: 1; }
+  .label { font-size: 12px; color: #888; margin-bottom: 16px; }
+</style>
+</head>
+<body>
+
+<h2>📦 DMZ 지도 범례 미리보기</h2>
+
+<div class="compare">
+  <!-- 기존 -->
+  <div>
+    <div class="label">❌ 기존 범례 (삭제 예정)</div>
+    <div class="dmz-map-wrap">
+      <div class="section-title">DMZ 지도 — 3/37건 복원</div>
+      <div class="dmz-map-labels"><span>서해 임진강</span><span>동해 고성</span></div>
+      <div class="dmz-pixel-map" id="map-old"></div>
+      <div class="dmz-map-legend">
+        <span class="legend-item"><span class="legend-box" style="background:#000;border-color:#fff;"></span>완료</span>
+        <span class="legend-item"><span class="legend-box" style="background:#aaa;"></span>진행 중</span>
+        <span class="legend-item"><span class="legend-box" style="background:#ddd;"></span>미시작</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 신규 -->
+  <div>
+    <div class="label">✅ 새 범례 (카테고리별 색상)</div>
+    <div class="dmz-map-wrap">
+      <div class="section-title">DMZ 지도 — 3/37건 복원</div>
+      <div class="dmz-map-labels"><span>서해 임진강</span><span>동해 고성</span></div>
+      <div class="dmz-pixel-map" id="map-new"></div>
+      <div class="dmz-map-legend">
+        <span class="legend-item"><span class="legend-box" style="background:#5B7FCC;"></span>기본정보</span>
+        <span class="legend-item"><span class="legend-box" style="background:#4CAF50;"></span>생태·환경</span>
+        <span class="legend-item"><span class="legend-box" style="background:#D4884A;"></span>국가유산</span>
+        <span class="legend-item"><span class="legend-box" style="background:#9C6ADE;"></span>사람들</span>
+        <span class="legend-item"><span class="legend-box" style="background:#E05757;"></span>갈등과 협력</span>
+        <span class="legend-item"><span class="legend-box" style="background:#3AACBF;"></span>평화 관광</span>
+        <span class="legend-item"><span class="legend-box" style="background:#333;border-color:#555;"></span>미완료</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const map = [
+  [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1, 4, 4, 5, 5, 5],
+  [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5],
+  [ 0, 0, 0,-1,-1,-1,-1,-1,-1,-1,-1,-1, 2, 2, 3, 3, 3, 3, 4, 4, 5, 5, 5,-1,-1],
+  [ 0, 0, 0, 0, 1, 1,-1,-1,-1, 2, 2, 2, 2, 3, 3, 3, 3,-1,-1,-1,-1,-1,-1,-1,-1],
+  [ 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+  [-1, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+  [-1,-1, 0, 0, 1, 1, 1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+  [-1,-1,-1, 0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+];
+const catColors = ['#5B7FCC','#4CAF50','#D4884A','#9C6ADE','#E05757','#3AACBF'];
+const px = 14;
+const cols = 25, rows = 8;
+
+// 시뮬레이션: cat01 완료(6/6), cat02 일부(2/6), 나머지 미완료
+const simFill = [1.0, 0.33, 0, 0, 0, 0];
+
+// 기존 맵 (회색 3단계)
+let oldCells = '';
+for (let r = 0; r < rows; r++) {
+  for (let c = 0; c < cols; c++) {
+    const z = map[r][c];
+    if (z === -1) continue;
+    let fill = '#ddd';
+    if (simFill[z] === 1) fill = '#000';
+    else if (simFill[z] > 0) fill = '#aaa';
+    oldCells += `<rect x="${c*px}" y="${r*px}" width="${px-1}" height="${px-1}" fill="${fill}" stroke="#ccc" stroke-width="0.5"/>`;
+  }
+}
+document.getElementById('map-old').innerHTML = `<svg viewBox="0 0 ${cols*px} ${rows*px}">${oldCells}</svg>`;
+
+// 새 맵 (카테고리 색상)
+const catCells = Array.from({length:6}, ()=>[]);
+for (let r = 0; r < rows; r++)
+  for (let c = 0; c < cols; c++)
+    if (map[r][c] >= 0) catCells[map[r][c]].push({r,c});
+
+let newCells = '';
+for (let z = 0; z < 6; z++) {
+  const zc = catCells[z];
+  const fillCount = Math.floor(zc.length * simFill[z]);
+  for (let i = 0; i < zc.length; i++) {
+    const {r,c} = zc[i];
+    const fill = i < fillCount ? catColors[z] : '#333';
+    newCells += `<rect x="${c*px}" y="${r*px}" width="${px-1}" height="${px-1}" fill="${fill}" stroke="#555" stroke-width="0.5"/>`;
+  }
+}
+document.getElementById('map-new').innerHTML = `<svg viewBox="0 0 ${cols*px} ${rows*px}">${newCells}</svg>`;
+</script>
+</body>
+</html>

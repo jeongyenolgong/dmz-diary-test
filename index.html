@@ -294,11 +294,9 @@ body {
 .dmz-map-labels { display: flex; justify-content: space-between; font-size: 0.6rem; color: var(--gray); margin-bottom: 0.4rem; }
 .dmz-pixel-map { display: flex; justify-content: center; margin-bottom: 0.6rem; }
 .dmz-pixel-map svg { width: 100%; max-width: 400px; image-rendering: pixelated; }
-.dmz-map-legend { display: flex; gap: 0.4rem; flex-wrap: wrap; justify-content: center; margin-top: 0.4rem; }
+.dmz-map-legend { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; margin-top: 0.6rem; }
 .dmz-map-legend .legend-item { font-size: 0.6rem; display: flex; align-items: center; gap: 0.2rem; }
 .dmz-map-legend .legend-box { width: 10px; height: 10px; border: 1px solid var(--fg); }
-.dmz-map-legend .legend-box.filled { background: var(--fg); }
-.dmz-map-legend .legend-box.partial { background: var(--light-gray); }
 .dmz-map-status { text-align: center; font-size: 0.75rem; color: var(--fg); margin-top: 0.6rem; font-weight: 700; }
 
 /* Tendency bars */
@@ -412,7 +410,7 @@ body {
       <span class="step-icon">✏️</span>
       <div class="step-body">
         <h3>빈칸 복원</h3>
-        <p>각 자료에는 빈칸이 1개씩 있습니다. 빈칸을 클릭하면 정답을 입력할 수 있어요.</p>
+        <p>각 자료에는 빈칸이 있습니다. 빈칸을 클릭하면 정답을 입력할 수 있어요.</p>
         <div class="step-example">정답은 <strong>다른 자료</strong>에서 찾아야 합니다!</div>
       </div>
     </div>
@@ -421,7 +419,7 @@ body {
       <span class="step-icon">🗂️</span>
       <div class="step-body">
         <h3>기록 선택</h3>
-        <p>4개 빈칸을 모두 복원하면, 후대에 남길 기록 <strong>2개</strong>를 선택합니다.</p>
+        <p>모든 빈칸을 복원하면, 후대에 남길 기록 <strong>2개</strong>를 선택합니다.</p>
       </div>
     </div>
     <div class="tutorial-step">
@@ -505,9 +503,9 @@ const CATEGORIES = [
   { id: 'cat06', name: '평화 관광', icon: '🕊️' },
 ];
 
-// insertBlanks: {{A}} 마커를 빈칸 슬롯으로 변환
+// insertBlanks: {{A}}, {{A1}}, {{C2}} 등 마커를 빈칸 슬롯으로 변환
 function insertBlanks(text, blanks) {
-  return text.replace(/\{\{([A-D])\}\}/g, (match, key) => {
+  return text.replace(/\{\{([A-D]\d?)\}\}/g, (match, key) => {
     if (blanks[key]) {
       return `<span class="blank-slot filled">${blanks[key]}</span>`;
     }
@@ -707,7 +705,7 @@ STORIES.cat01 = [
         templateData: {
           question: ['안녕하세요 초등학교 5학년인데요 여름방학 숙제로 DMZ에 대해 조사해 오라고 했는데 검색하면 너무 어려워요ㅠㅠ 휴전선이랑 DMZ랑 같은 건가요? 민통선은 또 뭔가요? 쉽게 설명해 주실 분 있나요??'],
           answer: [
-            '1. "휴전선"이라는 건 사실 정식 명칭이 아니에요. 정식 이름은 군사분계선(MDL)이에요. 1953년에 전쟁이 멈추고 나서, 그때 양쪽 군대가 서 있던 자리에 표식물(말뚝 같은 거)을 {{A}}개 세웠어요. 서해 임진강 하구에서 동해안 고성까지요. 그 말뚝들을 이은 가상의 선이 군사분계선이에요.',
+            '1. "휴전선"이라는 건 사실 정식 명칭이 아니에요. 정식 이름은 군사분계선(MDL)이에요. 1953년에 전쟁이 멈추고 나서, 그때 양쪽 군대가 서 있던 자리에 말뚝을 1,292개 세웠어요. 서해안 {{A1}} 하구에서 동해안 {{A2}}까지요. 그 말뚝들을 이은 가상의 선이 군사분계선이에요.',
             '2. DMZ(비무장지대)는 그 선 주변의 빈 공간이에요. 군사분계선에서 남쪽으로 2km, 북쪽으로 2km씩 물러나서 만든 빈 공간이 DMZ에요. 총 폭이 4km인 띠 모양이죠. 여기엔 군인도 못 들어가고 무기도 못 놓아요. 정전협정 제1조에 그렇게 정해져 있어요. DMZ의 남쪽 끝을 남방한계선(SLL), 북쪽 끝을 북방한계선이라고 불러요.',
             '3. 민통선(민간인통제선)은 DMZ와 다른 거예요! DMZ 남쪽의 남방한계선 밖에 또 있는 통제 구역이에요. DMZ는 정전협정(나라끼리 맺은 약속)으로 만들어진 거지만, 민통선은 우리나라 법(군사기지 및 군사시설 보호법)으로 만든 거예요. 1954년에 미 육군 제8군단이 만든 귀농선이 시작이에요.',
             '요약: • 휴전선(X) → 군사분계선(O): 1,292개 표식물을 이은 가상의 선 • DMZ: 군사분계선 남북 2km씩, 총 4km 폭의 완충지대 (정전협정 근거) • 민통선: DMZ 남쪽 바깥의 통제 구역 (국내법 근거)'
@@ -731,7 +729,7 @@ STORIES.cat01 = [
           photos: [{
             src: 'photos/cat01/1-2_MDL_표식물_1993_USAF.jpg',
             alt: '군사분계선 표식물',
-            caption: '[사진] 판문점 비무장지대 내 군사분계선(MDL) 표식물. 1953년 정전협정 직후 서해 임진강 하구에서 동해안 고성까지 총 1,292개가 설치되었다. 이 표식물들이 만들어낸 가상의 선이 곧 군사분계선이며, 이 선을 기준으로 남북 각 2km씩 후퇴하여 설정된 완충지대가 {{C}}이다.',
+            caption: '[사진] 판문점 비무장지대 내 {{C}}(MDL) 표식물. 1953년 정전협정 직후 서해 임진강 하구에서 동해안 고성까지 총 1,292개가 설치되었다. 이 표식물들이 만들어낸 가상의 선이 곧 군사분계선이며, 이 선을 기준으로 남북 각 2km씩 후퇴하여 설정된 완충지대가 비무장지대이다.',
             credit: '미국 공군(USAF), TECH. SGT. Scott Stewart 촬영 (1993)'
           }]
         }
@@ -740,7 +738,7 @@ STORIES.cat01 = [
         templateData: {
           messages: [
             {name:'민지', text:'선생님! 오늘 수업에서 DMZ 남쪽 끝이 남방한계선이라고 하셨잖아요. 근데 북방한계선은 DMZ 북쪽 끝인 건가요?'},
-            {name:'선생님', text:'맞아요 민지! 군사분계선에서 남쪽 2km가 {{D}}, 북쪽 2km가 북방한계선이에요. 그 사이 4km가 DMZ고요', align:'right'},
+            {name:'선생님', text:'맞아요 민지! 군사분계선에서 남쪽 2km가 남방한계선, 북쪽 2km가 북방한계선이에요. 그 사이 {{D}}km가 DMZ고요', align:'right'},
             {name:'민지', text:'아 그러면 뉴스에서 NLL이라고 하는 거랑은 다른 건가요?'},
             {name:'선생님', text:'좋은 질문이에요! NLL은 서해 바다의 북방한계선이에요. 땅의 북방한계선이랑 이름은 비슷한데 완전히 달라요', align:'right'},
             {name:'민지', text:'바다에도 경계가 있어요??'},
@@ -753,10 +751,11 @@ STORIES.cat01 = [
       }
     ],
     blanks: {
-      A: { answer: '1,292', hint: '이 숫자는 사진 자료(C)의 캡션에서 확인할 수 있습니다.', source: 'C', altAnswers: ['1292'] },
+      A1: { answer: '임진강', hint: '사진 자료(C)의 캡션에서 서쪽 출발점을 확인하세요.', source: 'C' },
+      A2: { answer: '고성', hint: '사진 자료(C)의 캡션에서 동쪽 끝점을 확인하세요.', source: 'C' },
       B: { answer: '귀농선', hint: '이 용어는 카카오톡 대화(D)에서 선생님이 언급합니다.', source: 'D' },
-      C: { answer: '비무장지대', hint: '정전협정 원문(B)에서 이 용어의 정의를 확인할 수 있습니다.', source: 'B', altAnswers: ['DMZ'] },
-      D: { answer: '남방한계선', hint: '지식인 Q&A(A)의 답변에서 DMZ 남쪽 끝의 명칭을 확인하세요.', source: 'A' }
+      C: { answer: '군사분계선', hint: '지식인 Q&A(A)의 답변에서 이 선의 정식 명칭을 확인하세요.', source: 'A', altAnswers: ['MDL'] },
+      D: { answer: '4', hint: '지식인 Q&A(A)의 요약에서 DMZ의 총 폭을 확인하세요.', source: 'A' }
     },
     choices: [
       { id:'A', icon:'❓', title:'지식인 Q&A', meaning:'누구나 이해할 수 있는 쉬운 설명을 남긴다' },
@@ -913,11 +912,10 @@ STORIES.cat01 = [
           paragraphs: [
             '수아야,',
             '형이 전역까지 딱 일주일 남았어. 지금 JSA 근무 마지막 밤이야.',
-            '공동경비구역. 동서 약 {{A}}m, 남북 약 400m. 이 좁은 구역 안에서 남북이 매일 서로를 마주보고 있어. 형이 1년 반 동안 매일 선 곳이야.',
+            '공동경비구역. 동서 약 800m, 남북 약 400m. 이 좁은 구역 안에서 남북이 매일 서로를 마주보고 있어. 형이 1년 반 동안 매일 선 곳이야. 유엔사 경비대대(UNCSB-JSA) 소속으로 배치돼서 한국군 신분인데 유엔사 지휘를 받는 독특한 구조야.',
             '파란색 T2 건물 알지? 거기 안에 긴 탁자가 있는데, 그 탁자 중심선이 군사분계선이야. 탁자 건너편에는 북한 쪽 판문각이 보여. 몇 발자국 거리인데, 세상에서 가장 먼 몇 발자국이야.',
-            '2018년에는 남북이 합의해서 이 안에서 무기를 다 치웠대. 양쪽 35명씩, 노란 완장만 차고 근무했다고 해. 잠깐이었지만 그때 여기서 남북 군인들이 자유롭게 오갔대.',
-            '근데 2023년에 북한이 다시 무장하면서, 지금은 원래대로야. 형도 지금 무장하고 있어.',
-            '재밌는 거 하나 알려줄까? 이 판문점의 원래 이름은 {{D}}래. 마을에 널빤지로 만든 대문이 많아서 붙은 이름인데, 정전회담 때 미국이랑 중국이 한자로 바꾸면서 판문점(板門店)이 된 거래.',
+            '{{A1}}년에는 남북이 합의해서 이 안에서 무기를 다 치웠대. 양쪽 35명씩, 노란 완장만 차고 근무했다고 해. 잠깐이었지만 그때 여기서 남북 군인들이 자유롭게 오갔대. 근데 {{A2}}년에 북한이 다시 무장하면서, 지금은 원래대로야. 형도 지금 무장하고 있어.',
+            '재밌는 거 하나 알려줄까? 이 판문점의 원래 이름은 널문리래. 마을에 널빤지로 만든 대문이 많아서 붙은 이름인데, 정전회담 때 미국이랑 중국이 한자로 바꾸면서 판문점(板門店)이 된 거래.',
             '일주일 뒤면 집이다. 엄마한테 형 좋아하는 된장찌개 해달라고 해.'
           ],
           sign: '형 준혁 올림'
@@ -928,8 +926,8 @@ STORIES.cat01 = [
           header: '[타임라인] JSA, 비무장에서 재무장까지 — 통일뉴스 2026.3.15',
           paragraphs: [
             '■ 2018.09.19 — 평양에서 9.19 군사합의 서명. JSA 비무장화 합의',
-            '■ 2018.10.25 — 초소·무기 철거, 지뢰 제거 완료. 남북 각 {{B}}명이 비무장 상태로 노란 완장 착용 근무',
-            '■ 2018.10.27 — 남북+유엔사 3자 합동 검증 완료',
+            '■ 2018.10.25 — 초소·무기 철거, 지뢰 제거 완료. 남북 각 35명이 비무장 상태로 노란 완장 착용 근무',
+            '■ 2018.10.27 — 남북+{{B}} 3자 합동 검증 완료',
             '■ 2023.11 — 북한, 9.19 합의 사실상 종료 선언. JSA 경비병 권총 재착용',
             '■ 2023.12 — 유엔사, 대응 조치로 JSA 근무자 재무장 승인',
             '■ 2024.06.04 — 대한민국 정부, 9.19 군사합의 전체 효력 정지 결정',
@@ -942,7 +940,7 @@ STORIES.cat01 = [
           photos: [{
             src: 'photos/cat01/1-5_JSA_ConferenceRow_2025_DVIDS8830815.jpg',
             alt: 'JSA Conference Row',
-            caption: '[사진] 남측에서 바라본 공동경비구역(JSA) Conference Row. 군사분계선 위에 놓인 파란색 유엔 회담장 건물 3동(T1·T2·T3)이 보인다. T2 내부 긴 탁자의 중심선이 곧 군사분계선이다. 뒤로 보이는 건물은 북측 {{C}}이다.',
+            caption: '[사진] 남측에서 바라본 공동경비구역(JSA) Conference Row. 군사분계선 위에 놓인 파란색 유엔 회담장 건물 3동(T1·{{C}}·T3)이 보인다. T2 내부 긴 탁자의 중심선이 곧 군사분계선이다. 뒤로 보이는 건물은 북측 판문각이다.',
             credit: 'Lt.Cmdr. Brendan Trembath, United Nations Command (2025.1.7). DVIDS #8830815. Public Domain'
           }]
         }
@@ -956,7 +954,7 @@ STORIES.cat01 = [
             {text:'정전회담 할 때 미국이랑 중국 사람들이 한자로 바꾼 거예요. 널문을 板門으로 쓰고, 근처 주막의 店을 합쳐서 板門店', sent:true},
             {text:'그리고 JSA가 뭔지 알아요?', sent:true},
             {text:'공동경비구역이요!', sent:false},
-            {text:'맞아요. 동서 약 800m 남북 약 400m 크기의 구역이에요. DMZ 안에서 남북이 함께 경비하는 유일한 곳이에요', sent:true},
+            {text:'맞아요. 동서 약 800m 남북 약 400m 크기의 구역이에요. DMZ 안에서 남북이 함께 경비하는 유일한 곳이에요. T2 건물 건너편에 보이는 북측 건물이 {{D}}이에요', sent:true},
             {text:'복장 규정이 있다던데 맞아요?', sent:false},
             {text:'네. 찢어진 청바지, 반바지, 슬리퍼, 군복 스타일 안 돼요. 여권 꼭 가져오세요!', sent:true}
           ]
@@ -964,10 +962,11 @@ STORIES.cat01 = [
       }
     ],
     blanks: {
-      A: { answer: '800', hint: '문자 메시지(D)에서 선생님이 JSA 크기를 설명합니다.', source: 'D' },
-      B: { answer: '35', hint: '편지(A)에서 양쪽 몇 명씩 근무했는지 확인하세요.', source: 'A' },
-      C: { answer: '판문각', hint: '편지(A)에서 T2 건물 건너편 건물 이름을 확인하세요.', source: 'A' },
-      D: { answer: '널문리', hint: '문자 메시지(D)에서 판문점의 원래 이름을 확인하세요.', source: 'D' }
+      A1: { answer: '2018', hint: '보도자료(B)의 타임라인에서 JSA 비무장화 합의 연도를 확인하세요.', source: 'B' },
+      A2: { answer: '2023', hint: '보도자료(B)의 타임라인에서 북한이 합의를 파기한 연도를 확인하세요.', source: 'B' },
+      B: { answer: '유엔사', hint: '편지(A)에서 JSA 경비대대의 지휘 체계를 확인하세요.', source: 'A', altAnswers: ['유엔사령부'] },
+      C: { answer: 'T2', hint: '편지(A)에서 파란색 건물 이름을 확인하세요.', source: 'A' },
+      D: { answer: '판문각', hint: '문자 메시지(D) 또는 편지(A)에서 북측 건물 이름을 확인하세요.', source: 'D' }
     },
     choices: [
       { id:'A', icon:'✉️', title:'군인의 편지', meaning:'현장 군인의 생생한 체험을 기록한다' },
@@ -1137,8 +1136,11 @@ STORIES.cat02 = [
         templateData: {
           photos: [
             { src:'photos/cat02/2-2_두루미_CC0.jpg', alt:'두루미',
-              caption:'[사진] 서리 내린 나뭇가지 위의 두루미(Grus japonensis). {{C}} 제202호이자 멸종위기 야생생물 I급으로 지정되어 있다. 전 세계 약 4,600마리 중 상당수가 매년 겨울 한반도 DMZ 일대를 찾는다.',
-              credit:'Lim Yangmook(임양묵), 2016. CC0' }
+              caption:'[사진 1] 겨울 철원 평야의 두루미. 흰 몸에 검은 목과 날개깃, 머리 꼭대기의 붉은 피부가 특징이다. 천연기념물 제{{C1}}호이자 멸종위기 야생생물 I급으로 지정되어 있으며, 전 세계 약 4,600마리에 불과한 희귀종이다.',
+              credit:'문화재청 국가유산포털, 천연기념물 제202호 두루미' },
+            { src:'photos/cat02/2-4_재두루미_문화재청.jpg', alt:'재두루미',
+              caption:'[사진 2] 논에서 먹이를 찾는 재두루미 무리. 회색 몸통과 목덜미에 있는 흰 줄무늬, 눈 주위의 붉은 피부가 두루미와 구별되는 특징이다. 천연기념물 제{{C2}}호이자 멸종위기 야생생물 Ⅱ급으로 지정되어 있다. 매년 겨울 철원평야에 약 10,000마리 이상이 찾아온다.',
+              credit:'문화재청 국가유산포털, 천연기념물 제203호 재두루미' }
           ]
         }
       },
@@ -1148,7 +1150,7 @@ STORIES.cat02 = [
           quotes: [
             '"내가 어렸을 때는 두루미가 이렇게 많지 않았어요. 요즘은 겨울에 논에 나가면 사방에 있어요."',
             '"재두루미는 두루미보다 더 많아요. 5천 마리 넘게 오거든요."',
-            '"{{D}}가 있어서 두루미가 오는 거예요. 사람이 못 들어가니까 논이 그대로 남아있고, 물이 있고, 먹이가 있으니까."',
+            '"철원평야가 있어서 두루미가 오는 거예요. 사람이 못 들어가니까 논이 그대로 남아있고, 물이 있고, 먹이가 있으니까. 우리 할아버지는 두루미를 {{D}}이라고 불렀어요."',
             '"가끔 생각해요. 전쟁이 이 땅을 갈라놓았는데, 그 덕분에 두루미가 살 곳이 생겼다는 거잖아요. 참 아이러니하죠."'
           ]
         }
@@ -1157,8 +1159,9 @@ STORIES.cat02 = [
     blanks: {
       A: { answer: '시베리아', hint: '뉴스 보도(B)에서 두루미의 번식지를 확인하세요.', source: 'B' },
       B: { answer: '재두루미', hint: '구술 인터뷰(D)에서 두루미보다 더 많은 종을 확인하세요.', source: 'D' },
-      C: { answer: '천연기념물', hint: '뉴스 보도(B)에서 두루미의 보호 지정을 확인하세요.', source: 'B' },
-      D: { answer: '철원평야', hint: '뉴스 보도(B)에서 두루미 월동지 이름을 확인하세요.', source: 'B' }
+      C1: { answer: '202', hint: '뉴스 보도(B)에서 두루미의 천연기념물 번호를 확인하세요.', source: 'B' },
+      C2: { answer: '203', hint: '뉴스 보도(B)에서 재두루미의 천연기념물 번호를 확인하세요.', source: 'B' },
+      D: { answer: '학', hint: '두루미의 일기(A)에서 두루미의 다른 이름을 확인하세요.', source: 'A' }
     },
     choices: [
       { id:'A', icon:'📓', title:'두루미의 일기', meaning:'자연의 시선으로 DMZ를 기록한다' },
@@ -1794,13 +1797,13 @@ STORIES.cat06 = [];
 
 // ===== ARCHIVIST TYPES =====
 const ARCHIVIST_TYPES = {
-  'AB': { name: '교차 기록가', desc: '당신은 개인의 감정과 공식 기록을 나란히 놓고 비교합니다. 한쪽만으로는 불완전한 기록이 된다는 것을 알기 때문입니다.' },
-  'AC': { name: '현장 기록가', desc: '당신은 누군가의 이야기를 듣고, 그것이 실재했음을 증명할 사진을 함께 남깁니다. 기억은 흐려져도 기록은 남습니다.' },
-  'AD': { name: '증언 수집가', desc: '당신은 공식 문서보다 사람에게 먼저 귀를 기울입니다. 편지 속 떨리는 글씨와 녹음 속 침묵이, 어떤 통계보다 많은 것을 말해준다고 믿습니다.' },
-  'BC': { name: '실증 분석가', desc: '당신은 감정을 배제하고 검증 가능한 것만 남깁니다. 신문 기사의 날짜와 사진 속 장소가 일치하는 순간, 기록은 역사가 됩니다.' },
-  'BD': { name: '구술사 연구자', desc: '당신은 신문이 보도하지 않은 이야기를 찾아 나섭니다. 공식 기록과 현장의 목소리를 대조할 때, 숨겨진 진실이 드러납니다.' },
-  'CD': { name: '현장 증언자', desc: '당신은 그 자리에 있었던 것처럼 기록합니다. 사진이 보여주는 풍경과 그곳에 있던 사람의 목소리를 겹쳐놓으면, 독자도 그 자리에 서게 됩니다.' },
-  'BALANCED': { name: '균형 잡힌 기록가', desc: '당신은 어떤 기록도 버리지 않습니다. 모든 형태의 기록이 동등한 가치를 가진다고 믿는 사람입니다.' }
+  'AB': { name: '교차 기록가', desc: '개인의 감정과 공식 기록을 나란히 놓고 비교한다. 한쪽만으로는 불완전한 기록이 된다는 것을 안다.' },
+  'AC': { name: '현장 기록가', desc: '누군가의 이야기를 듣고, 그것이 실재했음을 증명할 사진을 함께 남긴다.' },
+  'AD': { name: '증언 수집가', desc: '공식 문서보다 사람에게 먼저 귀를 기울인다. 편지 속 떨리는 글씨와 녹음 속 침묵이 어떤 통계보다 많은 것을 말해준다고 믿는다.' },
+  'BC': { name: '실증 분석가', desc: '감정을 배제하고 검증 가능한 것만 남긴다. 신문 기사의 날짜와 사진 속 장소가 일치하는 순간, 기록은 역사가 된다.' },
+  'BD': { name: '구술사 연구자', desc: '신문이 보도하지 않은 이야기를 찾아 나선다. 공식 기록과 현장의 목소리를 대조할 때 숨겨진 진실이 드러난다.' },
+  'CD': { name: '현장 증언자', desc: '그 자리에 있었던 것처럼 기록한다. 사진이 보여주는 풍경과 그곳에 있던 사람의 목소리를 겹쳐놓으면 독자도 그 자리에 서게 된다.' },
+  'BALANCED': { name: '균형 잡힌 기록가', desc: '어떤 기록도 버리지 않는다. 모든 형태의 기록이 동등한 가치를 가진다고 믿는 사람.' }
 };
 
 // ===== GAME STATE =====
@@ -1894,33 +1897,31 @@ function getArchivistType() {
   return ARCHIVIST_TYPES[typeKey] || ARCHIVIST_TYPES['BALANCED'];
 }
 
+// 카테고리별 색상 (0~5 = cat01~cat06)
+const CAT_COLORS = ['#3B82F6', '#22C55E', '#A855F7', '#EF4444', '#F97316', '#06B6D4'];
+
 function buildDmzMapSvg() {
-  // DMZ pixel map: ~30 cols x 9 rows, follows actual DMZ curve
-  // West (Paju/Imjin) wide, dips south through center (Cheorwon), rises east (Goseong)
-  // Each cell = category zone (0-5 mapping to cat01-cat06)
+  // DMZ pixel map: 37 cells = 최종 원고 수 (6+5+6+7+6+7)
+  // 1 pixel = 1 story, DMZ 곡선 형태 (서쪽 넓고 중부 남하, 동쪽 상승)
+  // 0=cat01(6) 1=cat02(5) 2=cat03(6) 3=cat04(7) 4=cat05(6) 5=cat06(7)
   const map = [
-    //  01  01  01  01  02  02  02  02  03  03  03  03  03  04  04  04  04  05  05  05  05  06  06  06  06
-    [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  4,  4,  5,  5,  5],
-    [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  3,  3,  4,  4,  4,  4,  5,  5,  5,  5],
-    [ 0,  0,  0, -1, -1, -1, -1, -1, -1, -1, -1, -1,  2,  2,  3,  3,  3,  3,  4,  4,  5,  5,  5, -1, -1],
-    [ 0,  0,  0,  0,  1,  1, -1, -1, -1,  2,  2,  2,  2,  3,  3,  3,  3, -1, -1, -1, -1, -1, -1, -1, -1],
-    [ 0,  0,  0,  0,  1,  1,  1,  1,  2,  2,  2,  2,  2,  2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-    [-1,  0,  0,  1,  1,  1,  1,  1,  1,  2,  2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-    [-1, -1,  0,  0,  1,  1,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-    [-1, -1, -1,  0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1, 4, 5, 5],
+    [-1,-1,-1,-1,-1,-1,-1,-1, 3, 3, 3, 4, 4, 4, 5, 5],
+    [ 0, 0, 0, 1, 1, 2, 2, 3, 3, 3, 3, 4, 4, 5, 5, 5],
+    [ 0, 0, 0, 1, 1, 2, 2, 2,-1,-1,-1,-1,-1,-1,-1,-1],
+    [-1,-1,-1,-1, 1, 2,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
   ];
 
-  const catStatus = CATEGORIES.map((cat, i) => {
+  // 각 카테고리별 완료된 스토리 수
+  const catCompleted = CATEGORIES.map((cat) => {
     const stories = STORIES[cat.id] || [];
-    const completed = stories.filter(s => state.completedStories.includes(s.id)).length;
-    const total = stories.length;
-    if (total === 0) return 'empty';
-    if (completed === total) return 'done';
-    if (completed > 0) return 'partial';
-    return 'none';
+    return stories.filter(s => state.completedStories.includes(s.id)).length;
   });
 
-  const px = 14;
+  // 각 카테고리별 등장 순서 카운터 (맵 왼→오, 위→아래)
+  const catCounter = [0, 0, 0, 0, 0, 0];
+
+  const px = 18;
   const cols = map[0].length;
   const rows = map.length;
   let cells = '';
@@ -1928,12 +1929,11 @@ function buildDmzMapSvg() {
     for (let c = 0; c < cols; c++) {
       const zone = map[r][c];
       if (zone === -1) continue;
-      const st = catStatus[zone];
-      let fill = '#eee';
-      if (st === 'done') fill = '#000';
-      else if (st === 'partial') fill = '#aaa';
-      else if (st === 'none') fill = '#ddd';
-      cells += `<rect x="${c*px}" y="${r*px}" width="${px-1}" height="${px-1}" fill="${fill}" stroke="#ccc" stroke-width="0.5"/>`;
+      const idx = catCounter[zone]++;
+      const done = idx < catCompleted[zone];
+      const fill = done ? CAT_COLORS[zone] : '#e5e5e5';
+      const stroke = done ? CAT_COLORS[zone] : '#ccc';
+      cells += `<rect x="${c*px}" y="${r*px}" width="${px-1}" height="${px-1}" rx="2" fill="${fill}" stroke="${stroke}" stroke-width="0.5"/>`;
     }
   }
 
@@ -1946,16 +1946,10 @@ function renderArchive() {
   const totalCompleted = state.completedStories.length;
   const totalStories = Object.values(STORIES).reduce((sum, arr) => sum + arr.length, 0);
 
-  // count completed categories
-  const completedCats = CATEGORIES.filter(cat => {
-    const stories = STORIES[cat.id] || [];
-    return stories.length > 0 && stories.every(s => state.completedStories.includes(s.id));
-  });
-
   let statusText = 'DMZ의 기록을 탐색하세요';
-  if (completedCats.length > 0 && completedCats.length < 6) {
-    statusText = `${completedCats.length}개 구역 복원 완료`;
-  } else if (completedCats.length === 6) {
+  if (totalCompleted > 0 && totalCompleted < totalStories) {
+    statusText = `${totalCompleted}건의 기록 복원 완료`;
+  } else if (totalCompleted === totalStories && totalStories > 0) {
     statusText = 'DMZ 전 구역 복원 완료';
   }
 
@@ -1988,9 +1982,7 @@ function renderArchive() {
         <div class="dmz-map-labels"><span>서해 임진강</span><span>동해 고성</span></div>
         <div class="dmz-pixel-map">${buildDmzMapSvg()}</div>
         <div class="dmz-map-legend">
-          <span class="legend-item"><span class="legend-box filled"></span>완료</span>
-          <span class="legend-item"><span class="legend-box partial"></span>진행 중</span>
-          <span class="legend-item"><span class="legend-box"></span>미시작</span>
+          ${CATEGORIES.map((cat, i) => `<span class="legend-item"><span class="legend-box" style="background:${CAT_COLORS[i]};border-color:${CAT_COLORS[i]}"></span>${cat.name}</span>`).join('')}
         </div>
         <div class="dmz-map-status">${statusText}</div>
       </div>
@@ -2074,37 +2066,48 @@ function getCurrentStory() {
   return stories.find(s => s.id === state.currentStory);
 }
 
+function getBlankKeysForSource(story, sourceId) {
+  // 해당 소스에 속한 빈칸 키 목록 반환 (A, A1, A2 등)
+  return Object.keys(story.blanks).filter(k => k.charAt(0) === sourceId);
+}
+
 function renderExploration() {
   const story = getCurrentStory();
   if (!story) return;
   document.getElementById('game-location').textContent = `📍 ${story.location}`;
   updateProgress();
+  const totalBlanks = Object.keys(story.blanks).length;
   const solvedCount = Object.keys(state.solvedBlanks).length;
   const content = document.getElementById('game-content');
   content.innerHTML = `
     <div class="phase-banner">
       <div class="phase-era">${story.era}</div>
       <h2>${story.title}</h2>
-      <div class="phase-desc">4개의 자료를 탐색하고, 자료 간 교차 참조로 빈칸을 복원하세요.</div>
+      <div class="phase-desc">${story.sources.length}개의 자료를 탐색하고, 자료 간 교차 참조로 빈칸을 복원하세요.</div>
       ${story.soundNote ? `<p class="sound-note">🔊 ${story.soundNote}</p>` : ''}
     </div>
     ${story.sources.map((src, i) => {
-      const isSolved = state.solvedBlanks[src.id];
+      const blankKeys = getBlankKeysForSource(story, src.id);
+      const solvedKeys = blankKeys.filter(k => state.solvedBlanks[k]);
+      const allSolved = blankKeys.length > 0 && solvedKeys.length === blankKeys.length;
+      const statusText = allSolved ? '복원 완료' : (blankKeys.length > 1 ? `빈칸 ${blankKeys.length}개` : '빈칸 1개');
       return `<div class="source-card ${src.styleClass}" onclick="openSource('${src.id}')" style="animation-delay:${i*0.1}s">
         <div class="card-header">
           <span class="card-icon">${src.icon}</span>
           <div><div class="card-title">${src.title}</div><div class="card-sub">${src.sub}</div></div>
-          <span class="card-status ${isSolved ? 'solved' : ''}">${isSolved ? '복원 완료' : '빈칸 1개'}</span>
+          <span class="card-status ${allSolved ? 'solved' : ''}">${statusText}</span>
         </div>
       </div>`;
     }).join('')}
-    ${solvedCount === 4 ? `<button class="btn-confirm" onclick="goToArchive()">모든 빈칸 복원 완료 — 기록 선택으로 →</button>` : ''}
+    ${solvedCount === totalBlanks ? `<button class="btn-confirm" onclick="goToArchive()">모든 빈칸 복원 완료 — 기록 선택으로 →</button>` : ''}
   `;
 }
 
 function updateProgress() {
+  const story = getCurrentStory();
+  const total = story ? Object.keys(story.blanks).length : 4;
   const solved = Object.keys(state.solvedBlanks).length;
-  document.getElementById('game-progress').textContent = `빈칸 복원 ${solved}/4`;
+  document.getElementById('game-progress').textContent = `빈칸 복원 ${solved}/${total}`;
 }
 
 // ===== SOURCE DETAIL =====
@@ -2163,10 +2166,11 @@ function submitAnswer() {
   const correct = input === blank.answer || (blank.altAnswers && blank.altAnswers.includes(input));
   if (correct) {
     const solvedId = currentBlankId;
+    const sourceId = solvedId.charAt(0); // A1→A, C2→C
     state.solvedBlanks[solvedId] = blank.answer;
     closeAnswerModal();
     showToast('correct', '복원되었습니다.', '');
-    setTimeout(() => { openSource(solvedId); }, 1200);
+    setTimeout(() => { openSource(sourceId); }, 1200);
   } else {
     showToast('incorrect', '다시 확인해보세요', '다른 자료를 교차 참조하여 정답을 찾아보세요.');
   }
